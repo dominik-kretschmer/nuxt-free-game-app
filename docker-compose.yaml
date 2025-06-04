@@ -15,5 +15,24 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
+  nuxt:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nuxt_app
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    environment:
+      CHOKIDAR_USEPOLLING: true
+      DB_HOST: db
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_NAME: your_database
+    volumes:
+      - .:/usr/src/app
+    command: npm run dev
+
 volumes:
   db_data:

@@ -5,7 +5,6 @@ const mode = computed(() => {
   const m = useRoute().params.mode as string
   return m === 'register' || m === 'login' ? m : 'login';
 })
-
 const configs = {
   register: {
     headline: 'Registrieren',
@@ -20,8 +19,8 @@ const configs = {
     linkText: 'Jetzt registrieren',
   },
 }
-
 const config = computed(() => configs[mode.value])
+
 </script>
 
 <template>
@@ -30,7 +29,7 @@ const config = computed(() => configs[mode.value])
       <h2 class="text-2xl font-heading text-center text-base mb-6">
         {{ config.headline }}
       </h2>
-      <account-form/>
+      <account-form :mode="config.headline " />
       <p class="mt-4 text-center text-sm text-secondary">
         {{ config.footerText }}
         <nuxt-link :href="config.link" class="text-accent hover:underline">

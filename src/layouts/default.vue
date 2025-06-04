@@ -4,11 +4,12 @@ import {routes} from "~/config/page-routes";
 <template>
   <div>
     <header class="sticky top-0 z-50  bg-primary shadow-md py-4 px-6 flex justify-between items-center">
-      <h1 class="text-xl font-heading text-soft">Meine App</h1>
+      <h1 class="text-xl font-heading text-soft">leck meine  eier drecks nuxt   </h1>
       <nav class="space-x-4">
         <nuxt-link :to=routes.home class="text-base hover:text-soft">Home</nuxt-link>
         <nuxt-link :to=routes.login class="text-base hover:text-soft">Login</nuxt-link>
         <nuxt-link :to=routes.register class="text-base hover:text-soft">Registrieren</nuxt-link>
+        <nuxt-link :to=routes.games class="text-base hover:text-soft">Games</nuxt-link>
       </nav>
     </header>
     <div class="min-h-screen bg-primary font-sans text-base ">
