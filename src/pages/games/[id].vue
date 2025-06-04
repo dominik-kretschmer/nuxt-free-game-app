@@ -20,23 +20,18 @@ const games = [
   }
 ]
 function addFav(){
-  console.log("added fav " , gameId)
+  console.log("added fav ", gameId)
 }
 const game = games.find(g => g.id === gameId)
 </script>
 <template>
   <div class="p-6">
     <NuxtLink to="/games" class="text-blue-600 hover:underline">&larr; Zurück</NuxtLink>
-
     <div v-if="game" class="mt-4">
-      <img
-          :src="game.image"
-          :alt="game.title"
-          class="w-full max-w-xl rounded-2xl shadow mb-4"
-      />
+      <img :src="game.image" :alt="game.title" class="w-full max-w-xl rounded-2xl shadow mb-4"/>
       <h1 class="text-3xl font-bold">{{ game.title }}</h1>
-      <button @click="addFav" class="text-red-500 hover:text-red-600">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+      <button @click="addFav" class="text-white-500 hover:text-red-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"  viewBox="0 0 20 20">
           <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 18.343l-6.828-6.829a4 4 0 010-5.656z" />
         </svg>
       </button>
