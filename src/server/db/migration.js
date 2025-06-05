@@ -1,4 +1,15 @@
-import pool from '/pool.ts';
+import pool from './pool.ts';
+
+/**
+ * @todo Convert migration.js to TypeScript for consistency with the rest of the project
+ * @todo Implement database migrations with versioning instead of dropping tables
+ * @todo Add more user fields to the user table (name, created_at, updated_at, etc.)
+ * @todo Add indexes to frequently queried columns for better performance
+ * @todo Create database backup and restore procedures
+ * @todo Set up automated database migrations during deployment
+ * @todo Add proper error handling and logging for migration failures
+ * @todo Implement transaction for all migration operations
+ */
 async function main() {
     const queries = [
         `DROP TABLE IF EXISTS ` + '`user`' + `;`,
