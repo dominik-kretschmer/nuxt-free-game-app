@@ -4,7 +4,7 @@ import {comparePassword} from "~/composables/hashHandler";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody<LoginRequest>(event)
-    if(await LoginUser(body)){
+    if(await loginUser(body)){
         return { success: true } as AuthResponse
     }else{
         return { success: false } as AuthResponse
@@ -13,13 +13,12 @@ export default defineEventHandler(async (event) => {
 
 /**
  * @todo Implement JWT or secure session management
- * @todo Set secure and httpOnly flags on cookies
  * @todo Add CSRF protection for authentication endpoints
  * @todo Implement rate limiting for authentication endpoints to prevent brute force attacks
  * @todo Add input validation and sanitization for user inputs
  */
 
-async function LoginUser(body: LoginRequest): Promise<boolean> {
+async function loginUser(body: LoginRequest): Promise<boolean> {
     const { email, password } = body;
     const userEntity = new UserEntity();
     const user = await userEntity.findByEmail(email);

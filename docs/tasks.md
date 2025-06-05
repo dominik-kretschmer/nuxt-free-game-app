@@ -2,21 +2,14 @@
 
 ## Security Improvements
 
-[ ] Implement password hashing using bcrypt or Argon2 in authentication endpoints
-[ ] Fix the logOut function in accountForm.vue (currently identical to login function)
 [ ] Add proper JWT-based authentication instead of insecure cookie-based authentication
-[ ] Set secure and httpOnly flags on cookies
 [ ] Add CSRF protection for authentication endpoints
 [ ] Implement rate limiting for authentication endpoints to prevent brute force attacks
 [ ] Add input validation and sanitization for all user inputs
 [ ] Protect against SQL injection by using parameterized queries for table names
-[ ] Implement proper error handling with secure error messages (don't expose sensitive information)
 
 ## Code Quality and Consistency
 
-[ ] Establish and enforce consistent naming conventions across the project (camelCase, PascalCase, etc.)
-[ ] Remove debug console.log statements from production code
-[ ] Replace `any` types with proper TypeScript interfaces and types
 [ ] Create interfaces for database entities (User, Game, etc.)
 [ ] Implement consistent error handling strategy across the application
 [ ] Convert migration.js to TypeScript for consistency with the rest of the project

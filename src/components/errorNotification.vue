@@ -17,16 +17,10 @@ const errorMessage = ref('')
 function triggerError(message :string) {
   errorMessage.value = message
   showError.value = true
-
-  setTimeout(() => {
-    showError.value = false
-  }, 3000)
 }
 </script>
 
 <template>
-  <button @click="triggerError('Etwas ist schiefgelaufen')">Fehler anzeigen</button>
-
   <div v-if="showError" class="fixed top-5 right-5 bg-red-500 text-white px-4 py-2 rounded shadow-lg transition">
     {{ errorMessage }}
   </div>

@@ -9,7 +9,7 @@
   >
     <template v-if="user">
       <h1 class="text-3xl mb-3">
-        Welcome, {{ user.name }}! 👋
+        Welcome, {{ user.email }}! 👋
       </h1>
       <div>
         <UAlert
@@ -37,7 +37,7 @@
         Login
       </h1>
       <UInput
-          v-model="name"
+          v-model="email"
           class="w-100 m-auto"
           placeholder="Enter your name..."
           @keypress.enter="login()"
@@ -45,7 +45,7 @@
       <div class="mt-3">
         <UButton
             icon="i-heroicons-user"
-            :disabled="!name"
+            :disabled="!emil"
             name="Log in"
             @click="login"
         >

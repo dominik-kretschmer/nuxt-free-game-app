@@ -1,5 +1,5 @@
 import pool from '../pool';
-import { BaseModel } from "./baseModel";
+import { BaseModel } from "./BaseModel";
 import { User } from "../../../types/database";
 
 /**

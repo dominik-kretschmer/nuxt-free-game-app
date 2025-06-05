@@ -1,10 +1,7 @@
 <script setup lang="ts">
 
 /**
- * @todo Fix the logOut function (currently identical to login function)
  * @todo Add proper JWT-based authentication instead of insecure cookie-based authentication
- * @todo Set secure and httpOnly flags on cookies
- * @todo Remove debug console.log statements from production code
  * @todo Implement form validation with meaningful error messages
  * @todo Add loading indicators for asynchronous operations
  * @todo Add proper error handling and user feedback for failed operations
@@ -12,9 +9,9 @@
  */
 
 const props = defineProps(['mode'])
-const email = ref('')
-const password = ref('')
-const user = useCookie<{ name: string } | null>('user', {"maxAge": 86400})
+const email :string = ref('')
+const password :string = ref('')
+const user = useCookie<{ name: string } | null>('user', {"maxAge": 86400 , httpOnly: true})
 const logins = useCookie<number>('logins')
 console.log(user.value)
 async function auth() {
@@ -26,7 +23,7 @@ async function auth() {
       body: {email: email.value, password: password.value}
     })
     if (data.success) {
-      login()
+      setAuthCookie()
     }else{
 
     }
@@ -35,17 +32,12 @@ async function auth() {
   }
 }
 
-const login = () => {
-  logins.value = (logins.value || 0) + 1
-  user.value = {email: email.value}
-}
-const logOut = () => {
+const setAuthCookie = () => {
   logins.value = (logins.value || 0) + 1
   user.value = {email: email.value}
 }
 
-const UserName = computed(() => {
-  console.log(user.value)
+const userName = computed(() => {
   return  user.value.email;
 })
 
@@ -69,7 +61,7 @@ const UserName = computed(() => {
     </form>
   </div>
   <div v-else>
-    <p class="text-secondary mb-4">Du bist angemeldet als: {{ UserName }}</p>
+    <p class="text-secondary mb-4">Du bist angemeldet als: {{ userName }}</p>
     <button @click="user.value = null" class="submit-btn">
       Abmelden
     </button>
