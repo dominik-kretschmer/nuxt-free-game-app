@@ -1,5 +1,5 @@
 import pool from '../pool'
-import { Entity, QueryResult } from '../../../types/database'
+import { Entity, QueryResult } from '~/types/database'
 
 /**
  * @todo Implement database transactions for operations that modify multiple records
@@ -8,7 +8,6 @@ import { Entity, QueryResult } from '../../../types/database'
  * @todo Protect against SQL injection by using parameterized queries for table names
  * @todo Implement proper error handling with secure error messages
  * @todo Add logging for database operations
- * @todo Create interfaces for database entities
  * @todo Add optimistic locking for concurrent updates
  */
 

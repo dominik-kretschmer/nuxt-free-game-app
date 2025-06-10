@@ -1,13 +1,13 @@
-import { UserEntity } from '../../db/entities/UserEntity'
-import { LoginRequest, AuthResponse } from '~/types/auth'
+import {UserEntity} from '../../db/entities/UserEntity'
+import {AuthResponse, LoginRequest} from '~/types/auth'
 import {comparePassword} from "~/composables/hashHandler";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody<LoginRequest>(event)
-    if(await loginUser(body)){
-        return { success: true } as AuthResponse
-    }else{
-        return { success: false } as AuthResponse
+    if (await loginUser(body)) {
+        return {success: true} as AuthResponse
+    } else {
+        return {success: false} as AuthResponse
     }
 })
 
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
  */
 
 async function loginUser(body: LoginRequest): Promise<boolean> {
-    const { email, password } = body;
+    const {email, password} = body;
     const userEntity = new UserEntity();
     const user = await userEntity.findByEmail(email);
 
@@ -38,6 +38,5 @@ async function loginUser(body: LoginRequest): Promise<boolean> {
             statusMessage: 'Invalid credentials',
         });
     }
-
     return true;
 }

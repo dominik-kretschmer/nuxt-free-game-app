@@ -1,6 +1,6 @@
 import pool from '../pool';
 import { BaseModel } from "./BaseModel";
-import { User } from "../../../types/database";
+import { User } from "~/types/database";
 
 /**
  * @todo Add more user fields to the user table (name, created_at, updated_at, etc.)

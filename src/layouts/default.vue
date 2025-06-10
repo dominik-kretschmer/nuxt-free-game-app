@@ -2,32 +2,35 @@
 import {routes} from "~/config/page-routes";
 </script>
 <template>
-  <div>
-    <header class="sticky top-0 z-50  bg-primary shadow-md py-4 px-6 flex justify-between items-center">
-      <h1 class="text-xl font-heading text-soft">leck meine  eier drecks nuxt   </h1>
-      <nav class="space-x-4">
-        <nuxt-link :to=routes.home class="text-base hover:text-soft">Home</nuxt-link>
-        <nuxt-link :to=routes.login class="text-base hover:text-soft">Login</nuxt-link>
-        <nuxt-link :to=routes.register class="text-base hover:text-soft">Registrieren</nuxt-link>
-        <nuxt-link :to=routes.games class="text-base hover:text-soft">Games</nuxt-link>
-      </nav>
-    </header>
-    <div class="min-h-screen bg-primary font-sans text-base ">
-      <slot></slot>
-    </div>
-    <footer class="bg-accent text-soft py-6 font-sans">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-          <p class="text-sm">&copy; 2025 Dein Unternehmen. Alle Rechte vorbehalten.</p>
-          <div class="flex space-x-6">
-            <nuxt-link to="#" class="hover:underline transition">Impressum</nuxt-link>
-            <nuxt-link to="#" class="hover:underline transition">Datenschutz</nuxt-link>
-            <nuxt-link to="#" class="hover:underline transition">Kontakt</nuxt-link>
-          </div>
-        </div>
-      </div>
-    </footer>
-  </div>
+  <v-app>
+    <v-app-bar app elevation="2" color="primary">
+      <v-app-bar-title>leck meine eier drecks nuxt</v-app-bar-title>
+      <v-spacer></v-spacer>
+      <v-btn :to="routes.home" text>Home</v-btn>
+      <v-btn :to="routes.login" text>Login</v-btn>
+      <v-btn :to="routes.register" text>Registrieren</v-btn>
+      <v-btn :to="routes.games" text>Games</v-btn>
+    </v-app-bar>
+
+    <v-main>
+      <v-container fluid>
+        <slot></slot>
+      </v-container>
+    </v-main>
+
+    <v-footer app color="primary" class="py-3">
+      <v-container>
+        <v-row align="center">
+          <v-col cols="12" md="6" class="text-center text-md-left">
+            <div class="text-body-2">&copy; 2025 Dein Unternehmen. Alle Rechte vorbehalten.</div>
+          </v-col>
+          <v-col cols="12" md="6" class="text-center text-md-right">
+            <v-btn to="#" text variant="plain" class="mx-2">Impressum</v-btn>
+            <v-btn to="#" text variant="plain" class="mx-2">Datenschutz</v-btn>
+            <v-btn to="#" text variant="plain" class="mx-2">Kontakt</v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-footer>
+  </v-app>
 </template>
-
-

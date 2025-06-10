@@ -13,7 +13,6 @@ const email :string = ref('')
 const password :string = ref('')
 const user = useCookie<{ name: string } | null>('user', {"maxAge": 86400 , httpOnly: true})
 const logins = useCookie<number>('logins')
-console.log(user.value)
 async function auth() {
   const endpoint = props.mode === "Login" ? "login" : "register"
 
@@ -43,27 +42,62 @@ const userName = computed(() => {
 
 </script>
 <template>
-  <div v-if="!user?.email" class="h-50">
-    <form class="space-y-4" @submit.prevent="auth">
-      <div>
-        <label for="email" class="block text-sm font-medium text-secondary">E-Mail-Adresse</label>
-        <input v-model="email" type="email" id="email" name="email" required
-               class="primary-input">
-      </div>
-      <div>
-        <label for="password" class="block text-sm font-medium text-secondary">Passwort</label>
-        <input v-model="password" type="password" id="password" name="password" required
-               class=" primary-input">
-      </div>
-      <button type="submit" class="submit-btn">
-        Senden
-      </button>
-    </form>
-  </div>
-  <div v-else>
-    <p class="text-secondary mb-4">Du bist angemeldet als: {{ userName }}</p>
-    <button @click="user.value = null" class="submit-btn">
-      Abmelden
-    </button>
-  </div>
+  <v-container v-if="!user?.email" style="height: 50%;">
+    <v-form @submit.prevent="auth" class="mt-4">
+      <v-row>
+        <v-col cols="12">
+          <v-text-field
+            v-model="email"
+            label="E-Mail-Adresse"
+            type="email"
+            required
+            variant="outlined"
+            color="primary"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12">
+          <v-text-field
+            v-model="password"
+            label="Passwort"
+            type="password"
+            required
+            variant="outlined"
+            color="primary"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12">
+          <v-btn
+            type="submit"
+            color="primary"
+            block
+            class="mt-2"
+          >
+            Senden
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-form>
+  </v-container>
+  <v-container v-else>
+    <v-row>
+      <v-col cols="12">
+        <v-card>
+          <v-card-text>
+            <p class="text-secondary mb-4">Du bist angemeldet als: {{ userName }}</p>
+            <v-btn
+              @click="user.value = null"
+              color="primary"
+              block
+            >
+              Abmelden
+            </v-btn>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>

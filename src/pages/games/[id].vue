@@ -1,45 +1,60 @@
 <script setup lang="ts">
 const route = useRoute()
 const gameId = parseInt(route.params.id as string)
+const detailUrl=`https://free-to-play-games-database.p.rapidapi.com/api/game?id=${gameId}`;
 
-const games = [
-  {
-    id: 1,
-    title: 'The Legend of Zelda: Breath of the Wild',
-    image: 'https://upload.wikimedia.org/wikipedia/en/0/0b/The_Legend_of_Zelda_Breath_of_the_Wild.jpg'
+interface Game {
+  id: number;
+  title: string;
+  thumbnail: string;
+  short_description?: string;
+  genre?: string;
+  platform?: string;
+}
+
+const { data, pending, error } = await useFetch<Game[]>(detailUrl, {
+  headers: {
+    'X-RapidAPI-Key': 'f1068a6948msh1132fe7de0dfa87p10ba70jsna609dd83ba41',
+    'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com'
   },
-  {
-    id: 2,
-    title: 'Elden Ring',
-    image: 'https://upload.wikimedia.org/wikipedia/en/b/b9/Elden_Ring_Box_art.jpg'
-  },
-  {
-    id: 3,
-    title: 'Hollow Knight',
-    image: 'https://upload.wikimedia.org/wikipedia/en/3/32/Hollow_Knight_cover.jpg'
+  default: () => []
+});
+
+const game = computed(() => {
+  if (data.value) {
+    return{
+      id: data.value.id,
+      title: data.value.title,
+      image: data.value.thumbnail,
+    }
   }
-]
+  return [];
+});
+
 function addFav(){
   console.log("added fav ", gameId)
 }
-const game = games.find(g => g.id === gameId)
+
 </script>
 <template>
-  <div class="p-6">
-    <NuxtLink to="/games" class="text-blue-600 hover:underline">&larr; Zurück</NuxtLink>
-    <div v-if="game" class="mt-4">
-      <img :src="game.image" :alt="game.title" class="w-full max-w-xl rounded-2xl shadow mb-4"/>
-      <h1 class="text-3xl font-bold">{{ game.title }}</h1>
-      <button @click="addFav" class="text-white-500 hover:text-red-600">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"  viewBox="0 0 20 20">
-          <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 18.343l-6.828-6.829a4 4 0 010-5.656z" />
-        </svg>
-      </button>
-    </div>
-    <div v-else class="text-red-500">Spiel nicht gefunden</div>
-  </div>
+  <v-container class="pa-6">
+    <v-btn to="/games" variant="text" color="primary" prepend-icon="mdi-arrow-left">Zurück</v-btn>
+    <v-card v-if="game" class="mt-4 pa-4" variant="flat">
+      <v-img :src="game.image" :alt="game.title" class="rounded-xl mb-4" max-width="600" >
+        <template v-slot:placeholder>
+          <div class="d-flex align-center justify-center fill-height">
+            <v-progress-circular
+                color="grey-lighten-4"
+                indeterminate
+            ></v-progress-circular>
+          </div>
+        </template>
+      </v-img>
+      <v-card-title class="text-h4 font-weight-bold">{{ game.title }}</v-card-title>
+      <v-btn icon @click="addFav" color="grey" variant="text" class="ml-2">
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
+    </v-card>
+    <v-alert v-else type="error" class="mt-4">Spiel nicht gefunden</v-alert>
+  </v-container>
 </template>
-
-
-
-

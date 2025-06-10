@@ -13,6 +13,7 @@
 
 const showError = ref(false)
 const errorMessage = ref('')
+const timeout = ref(5000) // 5 seconds
 
 function triggerError(message :string) {
   errorMessage.value = message
@@ -21,7 +22,21 @@ function triggerError(message :string) {
 </script>
 
 <template>
-  <div v-if="showError" class="fixed top-5 right-5 bg-red-500 text-white px-4 py-2 rounded shadow-lg transition">
+  <v-snackbar
+    v-model="showError"
+    :timeout="timeout"
+    color="error"
+    location="top right"
+  >
     {{ errorMessage }}
-  </div>
+
+    <template v-slot:actions>
+      <v-btn
+        variant="text"
+        @click="showError = false"
+      >
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
 </template>

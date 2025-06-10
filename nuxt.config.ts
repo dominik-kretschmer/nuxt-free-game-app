@@ -1,17 +1,32 @@
+import vuetify, {transformAssetUrls} from 'vite-plugin-vuetify'
+
 export default defineNuxtConfig({
+    build: {
+        transpile: ['vuetify'],
+    },
     srcDir: 'src/',
-    routeRules:{
-        '/': { redirect: '/home' }
+    routeRules: {
+        '/': {redirect: '/home'}
     },
     compatibilityDate: '2025-05-15',
     ssr: true,
     devtools: {enabled: true},
-    css: ['~/assets/css/main.css'],
     modules: [
-        '@nuxtjs/tailwindcss',
         '@nuxt/eslint',
         '@nuxt/fonts',
         '@nuxt/icon',
-        '@nuxt/image'
+        '@nuxt/image',
+        (_options, nuxt) => {
+            nuxt.hooks.hook('vite:extendConfig', (config) => {
+                config.plugins.push(vuetify({autoImport: true}))
+            })
+        }
     ],
+    vite: {
+        vue: {
+            template: {
+                transformAssetUrls,
+            },
+        },
+    },
 })

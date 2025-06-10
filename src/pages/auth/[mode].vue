@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {routes} from "~/config/page-routes";
+import AccountForm from "../../components/accountForm.vue";
 
 const mode = computed(() => {
   const m = useRoute().params.mode as string
@@ -24,18 +25,30 @@ const config = computed(() => configs[mode.value])
 </script>
 
 <template>
-  <section class="min-h-screen flex items-center justify-center font-sans text-base">
-    <div class="bg-soft p-8 rounded-2xl shadow-md w-full max-w-md">
-      <h2 class="text-2xl font-heading text-center text-base mb-6">
-        {{ config.headline }}
-      </h2>
-      <account-form :mode="config.headline " />
-      <p class="mt-4 text-center text-sm text-secondary">
-        {{ config.footerText }}
-        <nuxt-link :href="config.link" class="text-accent hover:underline">
-          {{ config.linkText }}
-        </nuxt-link>
-      </p>
-    </div>
-  </section>
+  <v-container fluid class="d-flex align-center" style="height: 100vh;">
+    <v-row align="center" justify="center">
+      <v-col cols="12" sm="8" md="6" lg="4">
+        <v-card class="pa-6" elevation="4" rounded="xl">
+          <v-card-title class="text-h5 text-center mb-4">
+            {{ config.headline }}
+          </v-card-title>
+          <v-card-text>
+            <account-form :mode="config.headline" />
+            <div class="text-center mt-4">
+              <span class="text-body-2">{{ config.footerText }}</span>
+              <v-btn
+                :to="config.link"
+                variant="text"
+                color="primary"
+                density="comfortable"
+                class="ml-1"
+              >
+                {{ config.linkText }}
+              </v-btn>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>

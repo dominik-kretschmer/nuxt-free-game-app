@@ -3,20 +3,41 @@ import {routes} from "~/config/page-routes";
 
 </script>
 <template>
-  <section class="min-h-screen flex items-center justify-center background-primary font-sans">
-    <div class="text-center p-8 max-w-xl bg-soft rounded-2xl shadow-md">
-      <h1 class="text-4xl font-heading text-base mb-4">Willkommen auf der Startseite</h1>
-      <p class="text-lg text-secondary mb-6">
-        Schön, dass du da bist! Entdecke unsere Funktionen und starte dein Erlebnis mit nur einem Klick.
-      </p>
-      <div class="flex justify-center space-x-4">
-        <nuxt-link :to="routes.login" class="bg-accent text-soft px-6 py-2 rounded-xl font-medium hover:opacity-90 transition-colors duration-300">
-          Einloggen
-        </nuxt-link>
-        <nuxt-link :to="routes.register"  class="bg-soft border border-accent text-accent px-6 py-2 rounded-xl font-medium hover:bg-primary/10 transition-colors duration-300">
-          Registrieren
-        </nuxt-link>
-      </div>
-    </div>
-  </section>
+  <v-container fluid class="d-flex align-center" style="height: 100vh;">
+    <v-row align="center" justify="center">
+      <v-col cols="12" sm="8" md="6" lg="4">
+        <v-card class="text-center pa-6" elevation="4" rounded="xl">
+          <v-card-title class="text-h4 font-weight-bold mb-4">Willkommen auf der Startseite</v-card-title>
+          <v-card-text>
+            <p class="text-body-1 mb-6">
+              Schön, dass du da bist! Entdecke unsere Funktionen und starte dein Erlebnis mit nur einem Klick.
+            </p>
+            <v-row justify="center" class="mt-4">
+              <v-col cols="auto" class="pa-2">
+                <v-btn
+                  :to="routes.login"
+                  color="primary"
+                  size="large"
+                  rounded
+                >
+                  Einloggen
+                </v-btn>
+              </v-col>
+              <v-col cols="auto" class="pa-2">
+                <v-btn
+                  :to="routes.register"
+                  color="secondary"
+                  size="large"
+                  rounded
+                  variant="outlined"
+                >
+                  Registrieren
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
