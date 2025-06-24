@@ -1,10 +1,10 @@
 import pool from '../pool'
 import { BaseModel } from './BaseModel'
-import {UserFavGame} from '~/types/database'
+import {Entity, UserFavGame} from '~/types/database'
 
 const favorites = new Map<string, Set<string>>()
 
-export class Favorites extends BaseModel<UserFavGame> {
+export class Favorites extends BaseModel<Entity> {
     constructor() {
         super('favorites')
     }
@@ -20,7 +20,7 @@ export class Favorites extends BaseModel<UserFavGame> {
         favorites.get(userId)?.delete(gameId)
     }
 
-    listFavorites(userId: string): string[] {
+     listFavorites(userId: string): string[] {
         return Array.from(favorites.get(userId) ?? [])
     }
 }

@@ -2,9 +2,9 @@ import {UserEntity} from '../../db/entities/UserEntity'
 import {AuthResponse, RegisterRequest} from '~/types/auth'
 import {User} from '~/types/database'
 import {hashPassword} from "~/composables/hashHandler";
+import {generateToken} from "~/composables/jwtHandler";
 
 /**
- * @todo Add JWT-based authentication instead of insecure cookie-based authentication
  * @todo Add CSRF protection for authentication endpoints
  * @todo Implement rate limiting for authentication endpoints to prevent brute force attacks
  * @todo Add more comprehensive input validation and sanitization
@@ -30,10 +30,13 @@ export default defineEventHandler(async (event) => {
         }))
     }
     const hash: string = await hashPassword(password);
-    await userEntity.create({
+    const result = await userEntity.create({
         email,
         password: hash
     } as Partial<User>)
 
-    return {success: true} as AuthResponse
+    const userId = result.insertId
+    const token = generateToken(userId)
+
+    return {success: true, token, userId} as AuthResponse
 })

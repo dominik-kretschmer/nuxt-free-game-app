@@ -1,7 +1,13 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
+
 const route = useRoute()
 const gameId = parseInt(route.params.id as string)
 const detailUrl=`https://free-to-play-games-database.p.rapidapi.com/api/game?id=${gameId}`;
+
+// Use the auth composable for authentication
+const { isLoggedIn, userId, fetchWithAuth } = useAuth();
+const isFavorite = ref(false);
 
 interface Game {
   id: number;
@@ -31,9 +37,55 @@ const game = computed(() => {
   return [];
 });
 
-function addFav(){
-  console.log("added fav ", gameId)
+// Check if the game is in favorites
+async function checkFavoriteStatus() {
+  // Only check favorites if user is logged in
+  if (!isLoggedIn.value) {
+    return;
+  }
+
+  try {
+    const response = await fetchWithAuth('/api/favorites/list');
+    if (response?.favorites) {
+      isFavorite.value = response.favorites.includes(gameId.toString());
+    }
+  } catch (e) {
+    console.error('Error checking favorite status:', e);
+  }
 }
+
+// Toggle favorite status
+async function toggleFavorite() {
+  // Require login to add/remove favorites
+  if (!isLoggedIn.value) {
+    // Could redirect to login page or show a message
+    alert('Please log in to add favorites');
+    return;
+  }
+
+  try {
+    if (isFavorite.value) {
+      // Remove from favorites
+      await fetchWithAuth('/api/favorites/remove', {
+        method: 'POST',
+        body: { gameId: gameId.toString() }
+      });
+    } else {
+      // Add to favorites
+      await fetchWithAuth('/api/favorites/add', {
+        method: 'POST',
+        body: { gameId: gameId.toString() }
+      });
+    }
+    // Toggle the favorite status
+    isFavorite.value = !isFavorite.value;
+  } catch (e) {
+    console.error('Error toggling favorite:', e);
+  }
+}
+
+// Check favorite status when component is mounted
+onMounted(checkFavoriteStatus);
 
 </script>
 <template>
@@ -51,7 +103,7 @@ function addFav(){
         </template>
       </v-img>
       <v-card-title class="text-h4 font-weight-bold">{{ game.title }}</v-card-title>
-      <v-btn icon @click="addFav" color="grey" variant="text" class="ml-2">
+      <v-btn icon @click="toggleFavorite" :color="isFavorite ? 'red' : 'grey'" variant="text" class="ml-2">
         <v-icon>mdi-heart</v-icon>
       </v-btn>
     </v-card>

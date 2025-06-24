@@ -11,8 +11,10 @@
 const props = defineProps(['mode'])
 const email :string = ref('')
 const password :string = ref('')
-const user = useCookie<{ name: string } | null>('user', {"maxAge": 86400 , httpOnly: true})
-const logins = useCookie<number>('logins')
+
+// Use the auth composable
+const { isLoggedIn, userEmail, setAuth, clearAuth } = useAuth()
+
 async function auth() {
   const endpoint = props.mode === "Login" ? "login" : "register"
 
@@ -21,28 +23,27 @@ async function auth() {
       method: 'POST',
       body: {email: email.value, password: password.value}
     })
-    if (data.success) {
-      setAuthCookie()
-    }else{
-
+    if (data.success && data.token && data.userId) {
+      setAuth(data.token, data.userId, email.value)
+    } else {
+      console.error('Authentication failed')
     }
   } catch (error) {
     console.error(error)
   }
 }
 
-const setAuthCookie = () => {
-  logins.value = (logins.value || 0) + 1
-  user.value = {email: email.value}
+const logout = () => {
+  clearAuth()
 }
 
 const userName = computed(() => {
-  return  user.value.email;
+  return userEmail.value || email.value
 })
 
 </script>
 <template>
-  <v-container v-if="!user?.email" style="height: 50%;">
+  <v-container v-if="!isLoggedIn" style="height: 50%;">
     <v-form @submit.prevent="auth" class="mt-4">
       <v-row>
         <v-col cols="12">
@@ -89,7 +90,7 @@ const userName = computed(() => {
           <v-card-text>
             <p class="text-secondary mb-4">Du bist angemeldet als: {{ userName }}</p>
             <v-btn
-              @click="user.value = null"
+              @click="logout"
               color="primary"
               block
             >

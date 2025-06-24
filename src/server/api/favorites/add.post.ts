@@ -1,9 +1,26 @@
-import { Favorites } from '~/server/db/entities/favorites'
+import {Favorites} from '~/server/db/entities/favorites'
 
 export default defineEventHandler(async (event) => {
-    const body = await readBody<{ userId: string; gameId: string }>(event)
+    // Get the user ID from the event context (set by auth middleware)
+    const userId = event.context.auth?.userId.toString()
 
-    Favorites.addFavorite(body.userId, body.gameId)
+    if (!userId) {
+        throw createError({
+            statusCode: 401,
+            message: 'Unauthorized - User ID not found'
+        })
+    }
 
-    return { success: true }
+    const body = await readBody<{ gameId: string }>(event)
+
+    if (!body.gameId) {
+        throw createError({
+            statusCode: 400,
+            message: 'Game ID is required'
+        })
+    }
+
+    const fav = new Favorites();
+    fav.addFavorite(userId, body.gameId);
+    return {success: true}
 })

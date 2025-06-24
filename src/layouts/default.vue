@@ -10,6 +10,10 @@ import {routes} from "~/config/page-routes";
       <v-btn :to="routes.login" text>Login</v-btn>
       <v-btn :to="routes.register" text>Registrieren</v-btn>
       <v-btn :to="routes.games" text>Games</v-btn>
+      <v-btn :to="routes.favorites" text>
+        <v-icon class="mr-1">mdi-heart</v-icon>
+        Favoriten
+      </v-btn>
     </v-app-bar>
 
     <v-main>

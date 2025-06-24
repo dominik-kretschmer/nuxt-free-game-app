@@ -1,11 +1,14 @@
 import {UserEntity} from '../../db/entities/UserEntity'
 import {AuthResponse, LoginRequest} from '~/types/auth'
 import {comparePassword} from "~/composables/hashHandler";
+import {generateToken} from "~/composables/jwtHandler";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody<LoginRequest>(event)
-    if (await loginUser(body)) {
-        return {success: true} as AuthResponse
+    const user = await loginUser(body)
+    if (user) {
+        const token = generateToken(user.id)
+        return {success: true, token, userId: user.id} as AuthResponse
     } else {
         return {success: false} as AuthResponse
     }
@@ -18,7 +21,7 @@ export default defineEventHandler(async (event) => {
  * @todo Add input validation and sanitization for user inputs
  */
 
-async function loginUser(body: LoginRequest): Promise<boolean> {
+async function loginUser(body: LoginRequest): Promise<any> {
     const {email, password} = body;
     const userEntity = new UserEntity();
     const user = await userEntity.findByEmail(email);
@@ -38,5 +41,5 @@ async function loginUser(body: LoginRequest): Promise<boolean> {
             statusMessage: 'Invalid credentials',
         });
     }
-    return true;
+    return user;
 }

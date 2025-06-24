@@ -1,6 +1,9 @@
 import vuetify, {transformAssetUrls} from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
+    devServer: {
+        port: 3000
+    },
     build: {
         transpile: ['vuetify'],
     },
@@ -11,6 +14,11 @@ export default defineNuxtConfig({
     compatibilityDate: '2025-05-15',
     ssr: true,
     devtools: {enabled: true},
+    nitro: {
+        routeRules: {
+            '/api/**': { cors: true }
+        }
+    },
     modules: [
         '@nuxt/eslint',
         '@nuxt/fonts',
