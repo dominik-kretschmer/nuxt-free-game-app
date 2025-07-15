@@ -2,12 +2,12 @@ import {Favorites} from '~/server/db/entities/favorites'
 
 export default defineEventHandler(async (event) => {
 
-   /* if (!userId) {
+    if (!userId) {
         throw createError({
             statusCode: 401,
             message: 'Unauthorized - User ID not found'
         })
-    }*/
+    }
 
     const body = await readBody<{ gameId: string }>(event)
 
@@ -19,9 +19,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const fav = new Favorites();
-/*
     fav.removeFavorite(userId, body.gameId)
-*/
 
     return {success: true}
 })

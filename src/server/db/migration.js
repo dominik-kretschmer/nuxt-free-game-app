@@ -34,6 +34,7 @@ async function main() {
             await pool.execute(query);
         }
         console.log('Alle Tabellen wurden erfolgreich gedroppt und neu angelegt.');
+        process.exit(0);
     } catch (error) {
         console.error('Fehler bei der Ausführung der Queries:', error);
     }

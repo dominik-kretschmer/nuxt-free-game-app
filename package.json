@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "migrate": "node  --trace-warnings --loader ts-node/esm server/migration.js",
+    "migrate": "node src/server/db/migration.js",
     "build": "nuxt build",
     "docker": "docker-compose up -d --build",
     "dev:nuxt": "nuxt dev",
