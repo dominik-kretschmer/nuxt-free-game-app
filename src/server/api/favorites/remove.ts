@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     if (!body.gameId || !body.token) {
         throw createError({
             statusCode: 401,
-            message: 'Game ID and token is required' +body.toString()
+            message: 'Game ID and token is required'
         })
     }
     const userId =  extractUserIdFromToken(body.token)

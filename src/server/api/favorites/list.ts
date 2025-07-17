@@ -35,8 +35,7 @@ export default defineEventHandler(async (event) => {
       games.push({
         id: gameId,
         title: response.title,
-        image: response.thumbnail,
-        description: response.short_description
+        image: response.thumbnail
       });
     }
   }

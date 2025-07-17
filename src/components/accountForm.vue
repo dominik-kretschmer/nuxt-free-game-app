@@ -8,18 +8,12 @@ const password = ref('');
 
 async function auth() {
   const endpoint = props.mode === "Login" ? "login" : "register"
-  try {
-    const data = await $fetch(`/api/auth/${endpoint}`, {
-      method: 'POST',
-      body: { email: email.value, password: password.value }
-    })
-    if (data.success && data.token) {
-      userIdStore.setToken(data.token);
-    } else {
-      console.error('Authentication failed' + data.success + data.token)
-    }
-  } catch (error) {
-    console.error(error)
+  const data = await $fetch(`/api/auth/${endpoint}`, {
+    method: 'POST',
+    body: { email: email.value, password: password.value }
+  })
+  if (data.success && data.token) {
+    userIdStore.setToken(data.token);
   }
 }
 

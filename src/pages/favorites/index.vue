@@ -20,8 +20,7 @@ async function fetchFavorites() {
     });
     favorites.value = response || [];
   } catch (e) {
-    error.value = e.message || 'Failed to load favorite games';
-    console.error('Error fetching favorites:', e);
+    error.value = e?.message || 'Failed to load favorite games';
   } finally {
     loading.value = false;
   }
@@ -40,8 +39,7 @@ async function removeFavorite(gameId) {
     });
 
     await fetchFavorites();
-  } catch (e) {
-    console.error('Error removing favorite:', e);
+  } catch {
     error.value = 'Failed to remove game from favorites';
   }
 }

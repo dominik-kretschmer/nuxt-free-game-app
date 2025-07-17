@@ -30,19 +30,14 @@ const game = computed(() => {
 
 async function checkFavoriteStatus() {
   if (!isUserLoggedIn.value) {
-    console.log('user not logged in');
     return;
   }
-  try {
-    const response = await $fetch('/api/favorites/list', {
-      method: 'POST',
-      body: { token: userIdStore.getToken },
-    });
-    if (response && Array.isArray(response)) {
-      isFavorite.value = response.some(game => game.id === gameId.toString());
-    }
-  } catch (e) {
-    console.error('Error checking favorite status:', e);
+  const response = await $fetch('/api/favorites/list', {
+    method: 'POST',
+    body: { token: userIdStore.getToken },
+  });
+  if (response && Array.isArray(response)) {
+    isFavorite.value = response.some(game => game.id === gameId.toString());
   }
 }
 
@@ -52,22 +47,18 @@ async function toggleFavorite() {
     return;
   }
 
-  try {
-    if (isFavorite.value) {
-      await $fetch('/api/favorites/remove', {
-        method: 'POST',
-        body: { gameId: gameId.toString(), token: userIdStore.getToken }
-      });
-    } else {
-      await $fetch('/api/favorites/add', {
-        method: 'POST',
-        body: { gameId: gameId.toString(), token: userIdStore.getToken }
-      });
-    }
-    isFavorite.value = !isFavorite.value;
-  } catch (e) {
-    console.error('Error toggling favorite:', e);
+  if (isFavorite.value) {
+    await $fetch('/api/favorites/remove', {
+      method: 'POST',
+      body: { gameId: gameId.toString(), token: userIdStore.getToken }
+    });
+  } else {
+    await $fetch('/api/favorites/add', {
+      method: 'POST',
+      body: { gameId: gameId.toString(), token: userIdStore.getToken }
+    });
   }
+  isFavorite.value = !isFavorite.value;
 }
 
 const isUserLoggedIn = computed(() => {
