@@ -9,8 +9,9 @@ export class Favorites extends BaseModel<Entity> {
     super('user_fav_games');
   }
 
-  removeFavorite(userId: string, gameId: string) {
-    favorites.get(userId)?.delete(gameId);
+  async removeFavorite(userId: string, gameId: string) {
+    const sql = `DELETE FROM \`${this.table}\` WHERE fk_user_id = ? AND game_id = ?`;
+    await pool.execute(sql, [userId, gameId]);
   }
 
   async getAllByUserId(userId: string): Promise<Entity[]> {

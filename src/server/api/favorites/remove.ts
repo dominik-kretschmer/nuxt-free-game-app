@@ -13,6 +13,6 @@ export default defineEventHandler(async (event) => {
     const userId =  extractUserIdFromToken(body.token)
 
     const fav = new Favorites();
-    fav.removeFavorite(userId, body.gameId);
+    await fav.removeFavorite(userId, body.gameId);
     return {success: true}
 })
