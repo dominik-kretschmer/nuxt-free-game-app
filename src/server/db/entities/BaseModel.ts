@@ -1,16 +1,6 @@
 import pool from '../pool'
 import { Entity, QueryResult } from '~/types/database'
 
-/**
- * @todo Implement database transactions for operations that modify multiple records
- * @todo Implement soft delete for entities instead of hard delete
- * @todo Implement pagination for database queries that return large result sets
- * @todo Protect against SQL injection by using parameterized queries for table names
- * @todo Implement proper error handling with secure error messages
- * @todo Add logging for database operations
- * @todo Add optimistic locking for concurrent updates
- */
-
 export class BaseModel<T extends Entity> {
     public table: string
 

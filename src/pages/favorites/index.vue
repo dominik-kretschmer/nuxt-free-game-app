@@ -5,20 +5,19 @@ const userIdStore = useUserStore();
 const favorites = ref<any[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
-const detailUrl = `https://free-to-play-games-database.p.rapidapi.com/api/game?id=${gameId}`;
+const apiUrl = 'https://free-to-play-games-database.p.rapidapi.com/api/games';
 
 async function fetchFavorites() {
-  if (!isLoggedIn.value) {
+  if (!isUserLoggedIn) {
     return;
   }
 
   loading.value = true;
   error.value = null;
-
   try {
     const response = await useFetch('/api/favorites/list', {
       headers: {
-        userId: userIdStore.getUserId()
+        userId: userIdStore.getUserId
       }
     });
     if (!response?.favorites || !response.favorites.length) {
@@ -28,7 +27,7 @@ async function fetchFavorites() {
     }
 
     const gamePromises = response.favorites.map((gameId: string) => {
-      return useFetch(detailUrl, {
+      return useFetch(apiUrl, {
         headers: {
           'X-RapidAPI-Key': 'f1068a6948msh1132fe7de0dfa87p10ba70jsna609dd83ba41',
           'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com'
@@ -51,13 +50,13 @@ async function fetchFavorites() {
 }
 
 async function removeFavorite(gameId: string) {
-  if (!isLoggedIn.value) {
+  if (!isUserLoggedIn) {
     error.value = 'You must be logged in to manage favorites';
     return;
   }
 
   try {
-    await fetchWithAuth('/api/favorites/remove', {
+    await useFetch('/api/favorites/remove', {
       method: 'POST',
       body: {gameId}
     });
@@ -68,7 +67,9 @@ async function removeFavorite(gameId: string) {
     error.value = 'Failed to remove game from favorites';
   }
 }
-
+const isUserLoggedIn = computed(() => {
+  return userIdStore.getUserId !== null
+})
 onMounted(fetchFavorites);
 </script>
 
@@ -76,7 +77,7 @@ onMounted(fetchFavorites);
   <v-container>
     <h1 class="text-h4 font-weight-bold mb-6">Meine Favoriten</h1>
 
-    <v-alert v-if="!isLoggedIn" type="info" class="mb-4">
+    <v-alert v-if="!isUserLoggedIn" type="info" class="mb-4">
       Bitte
       <NuxtLink to="/auth/login">melde dich an</NuxtLink>
       , um deine Favoriten zu sehen.

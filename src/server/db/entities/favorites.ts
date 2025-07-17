@@ -1,26 +1,29 @@
+import {BaseModel} from './BaseModel'
+import {Entity} from '~/types/database'
 import pool from '../pool'
-import { BaseModel } from './BaseModel'
-import {Entity, UserFavGame} from '~/types/database'
 
 const favorites = new Map<string, Set<string>>()
 
 export class Favorites extends BaseModel<Entity> {
     constructor() {
-        super('favorites')
+        super('user_fav_games')
     }
 
     addFavorite(userId: string, gameId: string) {
-        if (!favorites.has(userId)) {
-            favorites.set(userId, new Set())
-        }
-        favorites.get(userId)!.add(gameId)
+        console.log(userId, gameId)
+        favorites.get(userId)?.add(gameId)
     }
 
     removeFavorite(userId: string, gameId: string) {
         favorites.get(userId)?.delete(gameId)
     }
 
-     listFavorites(userId: string): string[] {
-        return Array.from(favorites.get(userId) ?? [])
+    async getAllByUserId(userId: string): Promise<Entity[]> {
+        const sql = `SELECT *
+                     FROM \`${this.table}\`
+                     WHERE fk_user_id = ?`
+        const [rows] = await pool.execute(sql, [userId])
+        return rows as Entity[]
     }
+
 }

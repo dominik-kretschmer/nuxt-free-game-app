@@ -1,13 +1,14 @@
 import {UserEntity} from '../../db/entities/UserEntity'
 import {AuthResponse, LoginRequest} from '~/types/auth'
-import {comparePassword ,hashPassword} from "~/composables/hashHandler";
+import {comparePassword} from "~/composables/hashHandler";
+import {generateToken} from"~/composables/jwtHandler"
 
 export default defineEventHandler(async (event) => {
     const body = await readBody<LoginRequest>(event)
     const user = await loginUser(body)
     if (user) {
-        const token = hashPassword(user.id)
-        return {success: true, token, userId: user.id} as AuthResponse
+        const token = generateToken({ userId: user.id });
+        return {success: true, token} as AuthResponse
     } else {
         return {success: false} as AuthResponse
     }

@@ -1,25 +1,18 @@
 import {Favorites} from '~/server/db/entities/favorites'
+import {extractUserIdFromToken} from "~/composables/jwtHandler"
 
 export default defineEventHandler(async (event) => {
 
-    if (!userId) {
+    const body = await readBody<{ gameId: string , token: string}>(event)
+    if (!body.gameId || !body.token) {
         throw createError({
             statusCode: 401,
-            message: 'Unauthorized - User ID not found'
+            message: 'Game ID and token is required' +body.toString()
         })
     }
-
-    const body = await readBody<{ gameId: string }>(event)
-
-    if (!body.gameId) {
-        throw createError({
-            statusCode: 400,
-            message: 'Game ID is required'
-        })
-    }
+    const userId =  extractUserIdFromToken(body.token)
 
     const fav = new Favorites();
-    fav.removeFavorite(userId, body.gameId)
-
+    fav.removeFavorite(userId, body.gameId);
     return {success: true}
 })

@@ -1,24 +1,21 @@
+import { defineStore } from 'pinia'
+import { extractUserIdFromToken } from '~/composables/jwtHandler'
+
 export const useUserStore = defineStore('userStore', {
     state: () => ({
-        userId: null as number | null
+        token: null as string | null
     }),
-
     getters: {
-        getUserId: (state) => state.userId
+        getToken: (state) => state.token,
     },
 
     actions: {
-        setUserId(id: number) {
-            this.userId = id;
+        setToken(token: string) {
+            this.token = token;
         },
 
-        clearUserId() {
-            this.userId = null;
+        clearToken() {
+            this.token = null;
         }
     },
-
-    persist: {
-        storage: persistedState.localStorage,
-        paths: ['userId']
-    }
 });

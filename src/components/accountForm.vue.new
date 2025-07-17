@@ -3,8 +3,8 @@ import {useUserStore} from "~/stores/userId.ts"
 
 const userIdStore = useUserStore();
 const props = defineProps(['mode']);
-const email: string = ref('');
-const password: string = ref('');
+const email = ref('');
+const password = ref('');
 
 async function auth() {
   const endpoint = props.mode === "Login" ? "login" : "register"
@@ -16,7 +16,7 @@ async function auth() {
     if (data.success && data.token) {
       userIdStore.setToken(data.token);
     } else {
-      console.error('Authentication failed' + data.success +data.token)
+      console.error('Authentication failed: ' + data.success)
     }
   } catch (error) {
     console.error(error)
@@ -32,7 +32,7 @@ const userName = computed(() => {
 })
 
 const isUserLoggedIn = computed(() => {
-  return userIdStore.getToken !== null
+  return userIdStore.getUserId !== null
 })
 
 </script>

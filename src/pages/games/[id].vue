@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import {onMounted, ref} from 'vue';
+import {useUserStore} from "../../stores/userId";
+
+const userIdStore = useUserStore();
 
 const route = useRoute()
 const gameId = parseInt(route.params.id as string)
 const detailUrl = `https://free-to-play-games-database.p.rapidapi.com/api/game?id=${gameId}`;
-
-const { isLoggedIn, userId, fetchWithAuth } = useAuth();
 const isFavorite = ref(false);
 
 interface Game {
@@ -17,7 +18,7 @@ interface Game {
   platform?: string;
 }
 
-const { data, pending, error } = await useFetch<Game[]>(detailUrl, {
+const {data,  error} = await useFetch<Game[]>(detailUrl, {
   headers: {
     'X-RapidAPI-Key': 'f1068a6948msh1132fe7de0dfa87p10ba70jsna609dd83ba41',
     'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com'
@@ -37,11 +38,16 @@ const game = computed(() => {
 });
 
 async function checkFavoriteStatus() {
-  if (!isLoggedIn.value) {
+  console.log('checkFavoriteStatus'+isUserLoggedIn.value);
+  if (!isUserLoggedIn.value) {
+    console.log('user not logged in');
     return;
   }
   try {
-    const response = await fetchWithAuth('/api/favorites/list');
+    const response = await $fetch('/api/favorites/list', {
+      method: 'POST',
+      body: {token: userIdStore.getToken},
+    })
     if (response?.favorites) {
       isFavorite.value = response.favorites.includes(gameId.toString());
     }
@@ -51,21 +57,21 @@ async function checkFavoriteStatus() {
 }
 
 async function toggleFavorite() {
-  if (!isLoggedIn.value) {
+  if (!isUserLoggedIn.value) {
     alert('Please log in to add favorites');
     return;
   }
 
   try {
     if (isFavorite.value) {
-      await fetchWithAuth('/api/favorites/remove', {
+      await $fetch('/api/favorites/remove', {
         method: 'POST',
-        body: { gameId: gameId.toString() }
+        body: {gameId: gameId.toString(), token: userIdStore.getToken}
       });
     } else {
-      await fetchWithAuth('/api/favorites/add', {
+      await $fetch('/api/favorites/add', {
         method: 'POST',
-        body: { gameId: gameId.toString() }
+        body: {gameId: gameId.toString(), token: userIdStore.getToken}
       });
     }
     isFavorite.value = !isFavorite.value;
@@ -74,6 +80,9 @@ async function toggleFavorite() {
   }
 }
 
+const isUserLoggedIn = computed(() => {
+  return userIdStore.getToken !== null
+})
 onMounted(checkFavoriteStatus);
 
 </script>
@@ -81,7 +90,7 @@ onMounted(checkFavoriteStatus);
   <v-container class="pa-6">
     <v-btn to="/games" variant="text" color="primary" prepend-icon="mdi-arrow-left">Zurück</v-btn>
     <v-card v-if="game" class="mt-4 pa-4" variant="flat">
-      <v-img :src="game.image" :alt="game.title" class="rounded-xl mb-4" max-width="600" >
+      <v-img :src="game.image" :alt="game.title" class="rounded-xl mb-4" max-width="600">
         <template v-slot:placeholder>
           <div class="d-flex align-center justify-center fill-height">
             <v-progress-circular

@@ -24,6 +24,7 @@ export default defineNuxtConfig({
         '@nuxt/fonts',
         '@nuxt/icon',
         '@nuxt/image',
+        '@pinia/nuxt',
         (_options, nuxt) => {
             nuxt.hooks.hook('vite:extendConfig', (config) => {
                 config.plugins.push(vuetify({autoImport: true}))

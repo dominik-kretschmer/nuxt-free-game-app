@@ -2,14 +2,7 @@ import {UserEntity} from '../../db/entities/UserEntity'
 import {AuthResponse, RegisterRequest} from '~/types/auth'
 import {User} from '~/types/database'
 import {hashPassword} from "~/composables/hashHandler";
-import {generateToken} from "~/composables/jwtHandler";
-
-/**
- * @todo Add CSRF protection for authentication endpoints
- * @todo Implement rate limiting for authentication endpoints to prevent brute force attacks
- * @todo Add more comprehensive input validation and sanitization
- */
-
+import {generateToken} from "~/composables/jwtHandler"
 export default defineEventHandler(async (event) => {
     const body :RegisterRequest = await readBody<RegisterRequest>(event)
     const {email, password} = body
@@ -36,7 +29,7 @@ export default defineEventHandler(async (event) => {
     } as Partial<User>)
 
     const userId = result.insertId
-    const token = generateToken(userId)
+    const token = generateToken({ userId });
 
-    return {success: true, token, userId} as AuthResponse
+    return {success: true, token} as AuthResponse
 })
